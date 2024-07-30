@@ -1,30 +1,70 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+	<div v-if="loading" class="app-loader">
+		<v-progress-circular color="dark-blue" indeterminate :size="50"></v-progress-circular>
+	</div>
+	<div v-else class="app-wrapper">
+		<NavBar />
+		<router-view />
+	</div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import axiosInstance from './axiosInterceptor';
+import NavBar from './components/NavBar.vue';
+
+export default {
+	name: 'App',
+	components: {
+		NavBar
+	},
+	data() {
+		return {
+			loading: true
+		}
+	},
+	beforeMount() {
+
+		const token = localStorage.getItem("token")
+
+		if (!token) {
+			this.loading = false
+			return;
+		}
+
+		axiosInstance.get("/api/v1/auth/verify")
+			.then(res => {
+				const { userName, profilePic, userRole } = res.data
+				this.$store.commit("updateUser", { userName, profilePic, userRole })
+			})
+			.catch(err => {
+				console.log(err);
+			})
+			.finally(() => {
+				this.loading = false
+			})
+	},
 }
 
-nav {
-  padding: 30px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+</script>
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+
+<style scoped lang="scss">
+.app-wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
+
+}
+
+.app-loader {
+	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>
