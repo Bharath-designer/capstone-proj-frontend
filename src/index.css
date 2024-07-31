@@ -5,7 +5,12 @@
 }
 
 html {
-    font-family: inter;
+    font-family: inter !important;
     --primary-color: #0C7ED1;
     overflow: auto;
+}
+
+
+body {
+    background: #d5d5d5;
 }

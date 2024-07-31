@@ -1,8 +1,5 @@
 <template>
-	<div v-if="loading" class="app-loader">
-		<v-progress-circular color="dark-blue" indeterminate :size="50"></v-progress-circular>
-	</div>
-	<div v-else class="app-wrapper">
+	<div v-if="!loading" class="app-wrapper">
 		<NavBar />
 		<router-view />
 	</div>
@@ -11,6 +8,8 @@
 <script>
 import axiosInstance from './axiosInterceptor';
 import NavBar from './components/NavBar.vue';
+import { ElLoading } from 'element-plus'
+
 
 export default {
 	name: 'App',
@@ -19,15 +18,24 @@ export default {
 	},
 	data() {
 		return {
-			loading: true
+			loading: true,
 		}
 	},
 	beforeMount() {
+		const loader = ElLoading.service({
+			lock: true,
+			background: 'rgba(0, 0, 0, 0.85)',
+		})
+
+		const cancelLoading = () => {
+			loader.close()
+			this.loading = false
+		}
 
 		const token = localStorage.getItem("token")
 
 		if (!token) {
-			this.loading = false
+			cancelLoading()
 			return;
 		}
 
@@ -40,7 +48,7 @@ export default {
 				console.log(err);
 			})
 			.finally(() => {
-				this.loading = false
+				cancelLoading()
 			})
 	},
 }

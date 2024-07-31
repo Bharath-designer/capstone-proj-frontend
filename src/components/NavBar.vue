@@ -51,7 +51,7 @@ export default {
     justify-content: space-between;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
     align-items: center;
-
+    background: white;
     .logo-container {
         display: flex;
         img {
@@ -64,11 +64,18 @@ export default {
         align-items: center;
         gap: 2em;
 
+        button {
+            border: none;
+            outline: none;
+            background: none;
+            cursor: pointer;
+        }
+
         .profile-icon {
             display: flex;
 
             img {
-                width: 2.1em;
+                width: 2.3em;
                 aspect-ratio: 1;
                 border-radius: 50%;
                 user-select: none;
