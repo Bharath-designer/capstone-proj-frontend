@@ -1,17 +1,26 @@
 <template>
-    <div>
-listed property
+    <div class="listed-properties-wrapper">
 
-<router-view></router-view>
+        <div>nav here</div>
+
+        <hr>
+
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
-    export default {
-        
-    }
+export default {
+
+}
 </script>
 
-<style lang="scss" scoped >
+<style scoped lang="scss">
+
+.listed-properties-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 
 </style>

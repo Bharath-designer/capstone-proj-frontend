@@ -71,7 +71,7 @@
             <div class="subs-container current-plan-details">
                 <div class="card">
                     <div class="label">Expires On</div>
-                    <div class="value">{{ parseDateString(profileDetails.expiresOn) }}</div>
+                    <div class="value">{{ profileDetails.expiresOn ? parseDateString(profileDetails.expiresOn) : '-' }}</div>
                 </div>
                 <div class="card">
                     <div class="label">Remaining Property Posting limit</div>
