@@ -1,18 +1,18 @@
 <template>
-    <GoogleLoginDialog v-if="showGoogleLoginPopup" @close="showGoogleLoginPopup = false"/>
+    <GoogleLoginDialog v-if="showGoogleLoginPopup" @close="showGoogleLoginPopup = false" />
     <div class="nav-bar-wrapper">
         <div class="logo-container">
-            <img :src="require('../assets/Brokerless_Logo.svg')" alt="">
+            <img @click="goToHome" :src="require('../assets/Brokerless_Logo.svg')" alt="">
         </div>
         <div class="nav-right-container">
-            <button class="post-property-btn">
+            <button v-if="showPostYourPropertyBtn" class="post-property-btn">
                 Post your property
             </button>
             <button v-if="user == null" @click="toggleGoogleLoginPopup" class="login-btn">
                 Login
             </button>
-            <button v-else class="profile-icon">
-                <img draggable="false" :src="user.profilePic" >
+            <button @click="goToProfile" v-else class="profile-icon">
+                <img @error="handleImageError" draggable="false" :src="user.profilePic">
             </button>
         </div>
     </div>
@@ -22,7 +22,7 @@
 import GoogleLoginDialog from './GoogleLoginDialog.vue';
 
 export default {
-    components : {
+    components: {
         GoogleLoginDialog
     },
     data: () => {
@@ -33,9 +33,22 @@ export default {
     computed: {
         user() {
             return this.$store.state.user
+        },
+        showPostYourPropertyBtn() {
+            return this.$route.name === "Home"
         }
     },
     methods: {
+        handleImageError(event) {
+            event.target.src = require("@/assets/profile-fallback.jpg");
+        },
+
+        goToProfile() {
+            this.$router.push({ name: "BasicProfile" })
+        },
+        goToHome() {
+            this.$router.push({ name: "Home" })
+        },
         toggleGoogleLoginPopup() {
             this.showGoogleLoginPopup = !this.showGoogleLoginPopup
         }
@@ -44,7 +57,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .nav-bar-wrapper {
     display: flex;
     padding: 1em 2em;
@@ -52,16 +64,18 @@ export default {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
     align-items: center;
     background: white;
+
     .logo-container {
         display: flex;
+
         img {
+            cursor: pointer;
             height: 1.1em;
         }
     }
 
     .nav-right-container {
         display: flex;
-        align-items: center;
         gap: 2em;
 
         button {
@@ -79,23 +93,25 @@ export default {
                 aspect-ratio: 1;
                 border-radius: 50%;
                 user-select: none;
+                object-fit: cover;
+                object-position: top;
             }
         }
-        
+
         .post-property-btn {
-            background: var(--primary-color);   
-            color: white;    
+            background: var(--primary-color);
+            color: white;
             font-weight: 500;
-            padding: .5em 1em;
             font-size: .9em;
             border-radius: .2em;
+            padding: .3em 1em;
+            font-family: inter;
         }
 
         .login-btn {
             font-weight: 500;
         }
-        
+
     }
 }
-
 </style>

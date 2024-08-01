@@ -12,7 +12,7 @@
                     <el-option v-for="item in tags" :key="item" :label="item" :value="item" />
                 </el-select>
 
-                <button class="search-btn">
+                <button @click="goToProperties" class="search-btn">
                     <img :src="require('@/assets/right-blue.svg')" alt="">
                 </button>
             </div>
@@ -43,8 +43,12 @@ export default {
         }
     },
     methods: {
+        goToProperties(){
+            this.$router.push({name:"Property"})
+        },
         getTags(query) {
             this.tagsLoading = true
+            if (!query) query = "";
             axiosInstance(`/api/v1/tags?query=${query}`)
                 .then(res => {
                     this.tags = res.data
@@ -56,9 +60,6 @@ export default {
                     this.tagsLoading = false
                 })
         },
-    },
-    beforeMount() {
-        this.getTags()
     }
 }
 </script>

@@ -7,7 +7,7 @@
 html {
     font-family: inter !important;
     --primary-color: #0C7ED1;
-    overflow: auto;
+    overflow: hidden;
 }
 
 

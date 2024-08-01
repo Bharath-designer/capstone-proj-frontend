@@ -27,7 +27,6 @@ export default {
     },
     methods: {
         googleOAuthCallback(value) {
-            console.log(value);
             axios.post("/api/v1/auth/google", {
                 token: value.credential
             })
