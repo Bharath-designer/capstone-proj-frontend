@@ -79,8 +79,10 @@ export default {
     display: flex;
     gap: 1em;
     padding: 1em;
-    border-bottom: 1px solid rgb(117, 117, 117);
+    border-bottom: 1px solid rgb(189, 189, 189);
     align-items: flex-start;
+    flex-wrap: wrap;
+    cursor: pointer;
 
     .left {
         display: flex;
@@ -112,16 +114,18 @@ export default {
         }
 
         .property-details {
-            width: 100%;
+            width: min(100%, 40em);
             display: flex;
             flex-wrap: wrap;
             margin-top: 1em;
-            gap: 5em;
+            gap: 2em;
+            row-gap: .5em;
 
             .properties-column {
                 display: flex;
                 flex-direction: column;
                 gap: .5em;
+                flex: 1;
             }
 
             .property-row {
@@ -130,6 +134,7 @@ export default {
 
 
                 .label {
+                    white-space: nowrap;
                     font-size: .8em;
                     color: rgb(87, 87, 87)
                 }
@@ -142,6 +147,28 @@ export default {
             }
         }
 
+    }
+
+    @media screen and (max-width:1000px) {
+        flex-direction: column;
+        padding: 2em 1em;
+
+        .left {
+            width: 100%;
+            justify-content: center;
+            max-height: fit-content;
+
+            img {
+                width: 100%;
+                height: 100%;
+                max-height: 15em;
+                object-fit: contain;
+            }
+        }
+
+        .right {
+            width: 100%;
+        }
     }
 
 }

@@ -10,7 +10,6 @@ import axiosInstance from './axiosInterceptor';
 import NavBar from './components/NavBar.vue';
 import { ElLoading } from 'element-plus'
 
-
 export default {
 	name: 'App',
 	components: {

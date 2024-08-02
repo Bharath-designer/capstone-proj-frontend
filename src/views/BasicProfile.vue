@@ -71,7 +71,8 @@
             <div class="subs-container current-plan-details">
                 <div class="card">
                     <div class="label">Expires On</div>
-                    <div class="value">{{ profileDetails.expiresOn ? parseDateString(profileDetails.expiresOn) : '-' }}</div>
+                    <div class="value">{{ profileDetails.expiresOn ? parseDateString(profileDetails.expiresOn) : '-' }}
+                    </div>
                 </div>
                 <div class="card">
                     <div class="label">Remaining Property Posting limit</div>
@@ -320,17 +321,20 @@ export default {
     height: 100%;
     overflow: auto;
     padding: 1em 0 2em;
+    scrollbar-width: none;
 
     .profile-section {
         display: flex;
+        flex-wrap: wrap;
         gap: 2em;
         align-items: center;
-        width: 50em;
+        width: min(50em, 90%);
         margin-inline: auto;
         margin-top: 2em;
 
         .profile-pic {
             display: flex;
+            text-align: center;
 
             img {
                 width: 10em;
@@ -342,7 +346,18 @@ export default {
             }
         }
 
+
+        @media screen and (max-width: 850px) {
+            flex-direction: column;
+            justify-content: center;
+
+            .profile-data {
+                width: 100%;
+            }
+        }
+
         .profile-data {
+            flex: 1;
 
             .name {
                 color: #4A4A4A;
@@ -363,6 +378,7 @@ export default {
                 gap: .5em;
 
                 .label {
+                    white-space: nowrap;
                     color: #676767;
                     font-size: .85em;
                 }
@@ -480,6 +496,7 @@ export default {
                         gap: .5em;
 
                         .limit-label {
+                            white-space: nowrap;
                             color: rgb(103, 103, 103);
                             font-size: .9em;
                         }
@@ -516,8 +533,11 @@ export default {
                 display: flex;
                 flex-direction: column;
                 gap: .5em;
+                flex: 1 0;
+                flex-basis: 15em;
 
                 .label {
+                    white-space: nowrap;
                     color: rgb(92, 92, 92);
                 }
 

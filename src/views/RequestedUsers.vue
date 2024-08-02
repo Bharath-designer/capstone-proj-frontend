@@ -6,8 +6,8 @@
                     {{ user.userName }}
                     <div class="email">{{ user.email }}</div>
                 </div>
-                <div class="message-icon">
-                    <el-tooltip class="box-item" effect="dark" content="Chat with the user" placement="top-start">
+                <div v-loading="user.chatLoading" @click="chatWithUser(user)" class="message-icon">
+                    <el-tooltip effect="dark" content="Chat with the user" placement="top-start">
                         <img class="chat-icon" :src="require('@/assets/message-icon.svg')" alt="">
                     </el-tooltip>
                 </div>
@@ -53,12 +53,29 @@ export default {
                 })
                 .catch(err => {
                     if (err?.response.status === 400) {
-                        this.$router.replace({ name: "MyListings" })
+                        this.$router.replace({ name: "My Listings" })
                     }
                 })
                 .finally(err => {
                     this.requestedUsersLoading = false
                 })
+        },
+        chatWithUser(user) {
+            user.chatLoading = true
+            axiosInstance.post("/api/v1/user/seller/conversation", {
+                userId: user.userId,
+                propertyId: this.$route.params.propertyId
+            })
+                .then(res => {
+                    this.$router.push({ name: "Chat Window", params: { conversationId: res.data.conversationId } })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    user.chatLoading = false
+                })
+
         }
     },
     beforeMount() {
@@ -73,7 +90,7 @@ export default {
     overflow: auto;
 
     .user-item {
-        padding: 1em;
+        padding: 1em 2em;
         border-bottom: 1px solid rgb(168, 168, 168);
         transition: .4s ease;
 
@@ -84,13 +101,14 @@ export default {
 
             .username {
                 font-weight: 500;
-                font-size: 1.05em;
                 color: rgb(59, 59, 59);
             }
 
             .message-icon {
                 width: 2.5em;
                 cursor: pointer;
+                display: flex;
+
             }
 
         }
@@ -127,7 +145,7 @@ export default {
         }
     }
 
-    .user-item:hover{
+    .user-item:hover {
         background: rgb(229, 229, 229);
 
     }

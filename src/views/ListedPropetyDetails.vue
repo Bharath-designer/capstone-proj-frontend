@@ -30,7 +30,7 @@ export default {
                 .catch(err => {
 
                     if (err?.response.status === 400) {
-                        this.$router.replace({ name: "MyListings" })
+                        this.$router.replace({ name: "My Listings" })
                     }
 
                 })

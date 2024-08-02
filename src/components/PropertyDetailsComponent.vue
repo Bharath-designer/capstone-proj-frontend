@@ -63,21 +63,23 @@
             <div v-if="!isOwner" class="section">
                 <div class="section-title">
                     <span>Seller Details</span>
-                    <span v-if="property.sellerDetails">
-                        <el-tooltip class="box-item" effect="dark" content="Chat with the seller" placement="top-start">
+                    <button v-loading="chatWithSellerLoading" :disabled="chatWithSellerLoading" @click="chatWithSeller"
+                        v-if="property.sellerDetails">
+                        <el-tooltip effect="dark" content="Chat with the seller" placement="top-start">
                             <img class="chat-icon" :src="require('@/assets/message-icon.svg')" alt="">
                         </el-tooltip>
-                    </span>
+                    </button>
                 </div>
                 <div class="section-content">
                     <div v-if="property.sellerDetails" class="properties-column">
                         <div class="property-row">
                             <div class="label">Seller Name:</div>
-                            <div class="value">Sample Name</div>
+                            <div class="value">{{ property.sellerDetails.name }}</div>
                         </div>
                         <div class="property-row">
                             <div class="label">Seller Mobile:</div>
-                            <div class="value">+91 983928383</div>
+                            <div class="value">{{ `${property.sellerDetails.countryCode}
+                                ${property.sellerDetails.phoneNumber}` }}</div>
                         </div>
                     </div>
                     <div v-else class="seller-details-not-available">
@@ -104,6 +106,7 @@
 <script>
 import { PropertyDetailsCardData } from '@/utilities/PropertyCardData';
 import GoogleMap from './GoogleMap.vue';
+import axiosInstance from '@/axiosInterceptor';
 
 export default {
     components: {
@@ -115,11 +118,29 @@ export default {
     ],
     data() {
         return {
-
+            chatWithSellerLoading: false
         }
     },
     methods: {
+        chatWithSeller() {
 
+
+
+            this.chatWithSellerLoading = true
+            axiosInstance.post("/api/v1/user/conversation", {
+                propertyId: this.property.propertyId
+            })
+                .then(res => {
+                    this.$router.push({ name: "Chat Window", params: { conversationId: res.data.conversationId } })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    this.chatWithSellerLoading = false
+                })
+
+        }
     },
     computed: {
         details() {
@@ -134,8 +155,6 @@ export default {
 
 </script>
 
-
-
 <style scoped lang="scss">
 .prop-details-container {
     flex: 1;
@@ -145,11 +164,14 @@ export default {
     border: .25em;
     border-radius: .25em;
     display: flex;
-    padding: 2em;
-    gap: 2em;
+    padding: 2em 0 2em 2em;
+
+    @media screen and (max-width: 768px) {
+        padding: 0;
+    }
 
     .left {
-        width: 30em;
+        width: min(30em, 40%);
         height: 20em;
 
         .property-media {
@@ -171,7 +193,7 @@ export default {
         gap: 1.5em;
         overflow: auto;
         scrollbar-width: none;
-
+        padding: 0 1.5em;
         .prop-desc {
             font-size: .9em;
             color: rgb(71, 71, 71)
@@ -189,11 +211,15 @@ export default {
                 display: flex;
                 justify-content: space-between;
 
-                span {
+                button {
                     display: flex;
+                    border: none;
+                    background: none;
+                    padding: 0;
+                    width: 2.8em;
 
                     .chat-icon {
-                        width: 2em;
+                        width: 100%;
                         cursor: pointer;
                     }
                 }
@@ -214,6 +240,10 @@ export default {
 
                 .google-map-container {
                     width: 100%;
+
+                    .vue-map-container div:first-child div:nth-child(2n) {
+                        display: none;
+                    }
                 }
 
                 .properties-column {
@@ -243,7 +273,26 @@ export default {
             }
         }
 
+        @media screen and (max-width: 768px) {
+            padding: 1em;
+        }
 
+    }
+
+    @media screen and (max-width:768px) {
+        flex-direction: column;
+        width: 100%;
+        scrollbar-width: none;
+
+
+        .left {
+            width: 100%;
+            padding: 1em 1em 0 1em;
+        }
+
+        .right {
+            overflow: visible;
+        }
     }
 }
 </style>

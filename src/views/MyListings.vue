@@ -26,7 +26,6 @@ export default {
 
             axiosInstance("/api/v1/user/listings")
                 .then(res => {
-                    console.log(res.data);
                     this.listings = res.data
                 })
                 .catch(err => {

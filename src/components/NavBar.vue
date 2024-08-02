@@ -11,8 +11,13 @@
             <button v-if="user == null" @click="toggleGoogleLoginPopup" class="login-btn">
                 Login
             </button>
-            <button @click="goToProfile" v-else class="profile-icon">
+            <button @click="goToProfile" v-else-if="!disableProfileIcon" class="profile-icon">
                 <img @error="handleImageError" draggable="false" :src="user.profilePic">
+            </button>
+            <button v-if="showMenu" class="nav-icon" @click="toggleNavbar">
+                <img class="close" v-if="isNavBarOpen" :src="require('@/assets/close.svg')" alt="">
+                <img v-else-if="showFilter" class="filter" :src="require('@/assets/filter-icon.svg')" alt="">
+                <img v-else :src="require('@/assets/hamburger.svg')" alt="">
             </button>
         </div>
     </div>
@@ -27,7 +32,8 @@ export default {
     },
     data: () => {
         return {
-            showGoogleLoginPopup: false
+            showGoogleLoginPopup: false,
+            isNavBarOpen: false
         }
     },
     computed: {
@@ -36,6 +42,25 @@ export default {
         },
         showPostYourPropertyBtn() {
             return this.$route.name === "Home"
+        },
+        showMenu() {
+            return this.$route.path.startsWith("/profile") || this.$route.name == 'Property'
+        },
+        showFilter() {
+            return this.$route.name == 'Property'
+        },
+        disableProfileIcon() {
+            return this.$route.path.startsWith("/profile") && false
+        },
+        routeChanges() {
+            return this.$route
+        }
+    },
+    watch: {
+        routeChanges() {
+            if (this.isNavBarOpen) {
+                this.toggleNavbar()
+            }
         }
     },
     methods: {
@@ -44,13 +69,17 @@ export default {
         },
 
         goToProfile() {
-            this.$router.push({ name: "BasicProfile" })
+            this.$router.push({ name: "Basic Profile" })
         },
         goToHome() {
             this.$router.push({ name: "Home" })
         },
         toggleGoogleLoginPopup() {
             this.showGoogleLoginPopup = !this.showGoogleLoginPopup
+        },
+        toggleNavbar() {
+            document.body.classList.toggle("custom-nav-open")
+            this.isNavBarOpen = !this.isNavBarOpen
         }
     }
 }
@@ -64,6 +93,7 @@ export default {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
     align-items: center;
     background: white;
+    z-index: 1000;
 
     .logo-container {
         display: flex;
@@ -78,6 +108,10 @@ export default {
         display: flex;
         gap: 2em;
 
+        @media screen and (max-width:500px) {
+            gap: 1em;
+        }
+
         button {
             border: none;
             outline: none;
@@ -89,7 +123,7 @@ export default {
             display: flex;
 
             img {
-                width: 2.3em;
+                width: 2.5em;
                 aspect-ratio: 1;
                 border-radius: 50%;
                 user-select: none;
@@ -106,12 +140,42 @@ export default {
             border-radius: .2em;
             padding: .3em 1em;
             font-family: inter;
+            white-space: nowrap;
+
+            @media screen and (max-width: 500px) {
+                display: none;
+            }
         }
 
         .login-btn {
             font-weight: 500;
         }
 
+        .nav-icon {
+
+            display: none;
+            justify-content: center;
+            height: 1.5em;
+            align-self: center;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+            img.close {
+                width: 1.7em
+            }
+
+            img.filter {
+                width: 1.6em
+            }
+
+            @media screen and (max-width: 768px) {
+                display: flex !important;
+            }
+        }
     }
 }
 </style>

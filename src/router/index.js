@@ -21,13 +21,13 @@ const routes = [
     component: () => import("../views/Profile.vue"),
     children: [
       {
-        path: "",
-        name: "BasicProfile",
+        path: "basic",
+        name: "Basic Profile",
         component: () => import("../views/BasicProfile.vue"),
       },
       {
         path: "listings",
-        name: "MyListings",
+        name: "My Listings",
         component: () => import("../views/MyListings.vue"),
       },
       {
@@ -53,15 +53,32 @@ const routes = [
       },
       {
         path: "properties",
-        name: "ViewedProperties",
+        name: "Requested Properties",
         component: () => import("../views/ViewedProperties.vue"),
       },
       {
-        path: "",
-        name: "MyChats",
+        path: "chats",
+        name: "My Chats",
         component: () => import("../views/MyChats.vue"),
+        children: [
+          {
+            path: ":conversationId",
+            name: "Chat Window",
+            component: () => import("../views/ChatWindow.vue"),
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "/property/add",
+    name: "Add Property",
+    component: () => import("../views/AddEditProperty.vue"),
+  },
+  {
+    path: "/property/edit/:propertyId",
+    name: "Edit Property",
+    component: () => import("../views/AddEditProperty.vue"),
   },
 ];
 

@@ -6,7 +6,8 @@
             </div>
             <div class="filter-content">
                 <div v-for="formItem in dynamicFormRender" class="filter-element">
-                    <el-form-item :label="formItem.formLabel" label-position="top" size="large">
+                    <el-form-item :label="formItem.formLabel" label-position="top"
+                        size="large">
                         <el-select clearable v-if="formItem.type == 'select'" v-model="filterData[formItem.vModel]"
                             :placeholder="'Select ' + formItem.formLabel" :multiple="formItem.multiple"
                             :remote="formItem.remote" :filterable="formItem.remote"
@@ -29,9 +30,12 @@
             </div>
         </div>
         <div v-infinite-scroll="getProperties" :infinite-scroll-disabled="disablePropertiesPagination" class="right">
-            <PropertyItemCard v-for="propertyItem in properties" :property="propertyItem"
-                :redirectFunction="() => $router.push({ name: 'PropertyDetails', params: { propertyId:
-                propertyItem.propertyId }})" />
+            <PropertyItemCard v-for="propertyItem in properties" :property="propertyItem" :redirectFunction="() => $router.push({
+                name: 'PropertyDetails', params: {
+                    propertyId:
+                        propertyItem.propertyId
+                }
+            })" />
             <div v-if="propertiesLoading" class="property-loader" v-loading="propertiesLoading">
             </div>
         </div>
@@ -227,8 +231,36 @@ export default {
 
 
 <style scoped lang="scss">
-.explore-property-wrapper {
+@media screen and (max-width: 768px) {
 
+    body .left {
+        display: none !important;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        border-radius: 0 !important;
+        box-shadow: 100px 0 1000px 1000px rgba(0, 0, 0, 0.8);
+        z-index: 999;
+    }
+
+    body.custom-nav-open .left {
+        display: flex !important;
+        pointer-events: all !important;
+
+    }
+
+    body.custom-nav-open .right {
+        pointer-events: none;
+    }
+
+
+}
+</style>
+
+<style scoped lang="scss">
+.explore-property-wrapper {
+    position: relative;
     flex: 1;
     overflow: hidden;
     padding: 1em;
