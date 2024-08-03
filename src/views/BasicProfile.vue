@@ -106,6 +106,10 @@
                             <div class="limit-label">Property Viewing Limit:</div>
                             <div class="limit-value">{{ template.maxViewingCount }}</div>
                         </div>
+                        <div class="limit-row">
+                            <div class="limit-label">Validity:</div>
+                            <div class="limit-value">{{ template.validity }} days</div>
+                        </div>
                     </div>
                     <button :disabled="paymentLoading" v-if="template.upgradeBtn" @click="upgradePlan(template.name)"
                         class="upgrade-btn">
@@ -153,7 +157,9 @@ export default {
                     name: "Free",
                     maxListingCount: 1,
                     maxViewingCount: 1,
-                    upgradeBtn: false
+                    upgradeBtn: false,
+                    validity: null,
+
                 })
             }
 
@@ -161,12 +167,16 @@ export default {
                 name: "Silver",
                 maxListingCount: 10,
                 maxViewingCount: 10,
+                price: "499",
+                validity: 28,
                 upgradeBtn: true
             },
             {
                 name: "Gold",
                 maxListingCount: 50,
                 maxViewingCount: 50,
+                price: "499",
+                validity: 28,
                 upgradeBtn: true
             }
             ]

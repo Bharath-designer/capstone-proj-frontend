@@ -30,6 +30,14 @@
                         </el-tooltip>
                     </span>
                 </span>
+                <span class="edit-btn" v-if="routerName === 'Property details'" @click="editProperty">
+                    <span>Edit Property</span>
+                    <img :src="require('@/assets/edit.svg')" alt="">
+                </span>
+                <span class="add-btn" v-if="routerName === 'My Listings'" @click="addProperty">
+                    <span>Post Property</span>
+                    <img :src="require('@/assets/add.svg')" alt="">
+                </span>
             </div>
             <div class="right-router-view">
                 <router-view></router-view>
@@ -46,6 +54,12 @@ export default {
         }
     },
     methods: {
+        addProperty() {
+            this.$router.push({name:"Add Property"})
+        },
+        editProperty(){
+            this.$router.push({name:"Edit Property"})
+        },
         logout() {
             localStorage.clear()
             document.cookie = ""
@@ -222,6 +236,44 @@ export default {
                     width: .9em;
                     cursor: pointer;
                 }
+            }
+
+        }
+        .edit-btn {
+            padding: .3em .8em;
+            display: flex;
+            margin-left: auto;
+            background: var(--primary-color);
+            gap: .5em;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+
+            span {
+                font-size: .8em;
+            }
+
+            img {
+                width: .9em;
+            }
+        }
+
+        .add-btn {
+            padding: .3em .8em;
+            display: flex;
+            margin-left: auto;
+            background: var(--primary-color);
+            gap: .5em;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+
+            span {
+                font-size: .8em;
+            }
+
+            img {
+                width: .6em;
             }
         }
     }

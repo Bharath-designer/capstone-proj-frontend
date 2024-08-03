@@ -1,41 +1,41 @@
 export const propertyTypeOptions = [
   {
     label: "Residential",
-    value: "residential",
+    value: "Residential",
   },
   {
     label: "Commercial",
-    value: "commercial",
+    value: "Commercial",
   },
   {
     label: "Product",
-    value: "product",
+    value: "Product",
   },
   {
     label: "Land",
-    value: "land",
+    value: "Land",
   },
 ];
 
 export const propertyCategoryOptions = [
   {
     label: "House",
-    value: "house",
+    value: "House",
   },
   {
     label: "Hostel",
-    value: "hostel",
+    value: "Hostel",
   },
 ];
 
 export const listingTypeOptions = [
   {
     label: "Sale",
-    value: "sale",
+    value: "Sale",
   },
   {
     label: "Rent",
-    value: "rent",
+    value: "Rent",
   },
 ];
 
@@ -58,11 +58,11 @@ export const currencyList = ["INR", "USD"];
 export const durationOptions = [
   {
     label: "Month",
-    value: "month",
+    value: "Month",
   },
   {
     label: "Year",
-    value: "year",
+    value: "Year",
   },
 ];
 
@@ -81,45 +81,78 @@ export const genderOptions = ["Male", "Female"];
 
 export const foodOptions = ["None", "Veg", "NonVeg", "Both"];
 
-export const waterSupplyOptions = [
-'None',
-'Borewell',
-'Corporation',
-'Both'
-]
+export const waterSupplyOptions = ["None", "Borewell", "Corporation", "Both"];
 
-export const electricityOptions = [
-  'None',
-  'Solar',
-  'ElectricBoard',
-  'Both'
-]
+export const electricityOptions = ["None", "Solar", "ElectricBoard", "Both"];
 
-export const furnitureOptions = [
-  'None',
-  'SemiFurnished',
-  'FullyFurnished'
-]
+export const furnitureOptions = ["None", "SemiFurnished", "FullyFurnished"];
 
 export const commercialTypeOptions = [
-  'OfficeSpace',
-  'RetailStore',
-  'IndustrialUnit',
-  'Restaurant',
-  'Hotel'
-]
+  "OfficeSpace",
+  "RetailStore",
+  "IndustrialUnit",
+  "Restaurant",
+  "Hotel",
+];
 
 export const zoningTypeOptions = [
-  'Residential', 
-  'Commercial', 
-  'Industrial', 
-  'Agricultural'
-]
+  "Residential",
+  "Commercial",
+  "Industrial",
+  "Agricultural",
+];
 
 export const productTypeOptions = [
-  'Electronics', 
-  'Household', 
-  'Furniture', 
-  'HomeDecor', 
-  'Fitness'
+  "Electronics",
+  "Household",
+  "Furniture",
+  "HomeDecor",
+  "Fitness",
+];
+
+export const propertyStatusOptions= [
+  "Active",
+  "Inactive",
 ]
+
+export const propertyFieldList = [
+  "propertyType",
+  "propertyCategory",
+  "listingType",
+  "price",
+  "rent",
+  "rentDuration",
+  "deposit",
+  "currency",
+  "pricePerUnit",
+  "description",
+  "city",
+  "state",
+  "locationLat",
+  "locationLon",
+  "priceNegotiable",
+  "typesOfRooms",
+  "genderPreference",
+  "food",
+  "wifi",
+  "gatedSecurity",
+  "measurementUnit",
+  "length",
+  "width",
+  "height",
+  "floorCount",
+  "roomCount",
+  "hallAndKitchenAvailable",
+  "restroomCount",
+  "waterSupply",
+  "electricity",
+  "carParkingHouse",
+  "carParkingCommercial",
+  "furnishingDetails",
+  "commercialType",
+  "zoningType",
+  "productType",
+  "manufacturer",
+  "warrantyPeriod",
+  "warrantyUnit",
+];

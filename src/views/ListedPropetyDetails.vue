@@ -1,5 +1,10 @@
 <template>
     <div class="listed-property-details">
+        <div v-if="propertyDetails?.isApproved === false" class="special-row">
+            <el-tag size="large" class="property-approval-warning" type="danger">
+                Property is will be published once Admin approves.
+            </el-tag>
+        </div>
         <PropertyDetailsComponent v-if="propertyDetails" :property="propertyDetails" :isOwner="true" />
     </div>
 </template>
@@ -29,7 +34,7 @@ export default {
                 })
                 .catch(err => {
 
-                    if (err?.response.status === 400) {
+                    if (err?.response?.status === 400) {
                         this.$router.replace({ name: "My Listings" })
                     }
 
@@ -52,5 +57,10 @@ export default {
     overflow: auto;
     display: flex;
     flex-direction: column;
+
+    .property-approval-warning {
+        width: 100%;
+    }
+
 }
 </style>

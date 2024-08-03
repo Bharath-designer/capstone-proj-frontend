@@ -5,7 +5,7 @@
         <div class="total-container">
             <div class="total-card">
                 <div class="label">
-                    Total Views
+                    Total Requested Users
                 </div>
                 <div class="value">
                     {{ analytics.totalViews }}
@@ -102,7 +102,7 @@ export default {
                     this.chartData.datasets[0].data = visitData
                 })
                 .catch(err => {
-                    if (err?.response.status === 400) {
+                    if (err?.response?.status === 400) {
                         this.$router.replace({ name: "My Listings" })
                     }
                 })

@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="section">
+            <div v-if="details.amenitiesLeft?.length > 0 || details.amenitiesRight?.length > 0" class="section">
                 <div class="section-title">
                     Amenities
                 </div>
@@ -64,7 +64,7 @@
                 <div class="section-title">
                     <span>Seller Details</span>
                     <button v-loading="chatWithSellerLoading" :disabled="chatWithSellerLoading" @click="chatWithSeller"
-                        v-if="property.sellerDetails">
+                        v-if="!isAdmin && property.sellerDetails">
                         <el-tooltip effect="dark" content="Chat with the seller" placement="top-start">
                             <img class="chat-icon" :src="require('@/assets/message-icon.svg')" alt="">
                         </el-tooltip>
@@ -80,6 +80,9 @@
                             <div class="label">Seller Mobile:</div>
                             <div class="value">{{ `${property.sellerDetails.countryCode}
                                 ${property.sellerDetails.phoneNumber}` }}</div>
+                            <div v-if="property.sellerDetails.phoneNumberVerified" class="verified">
+                                <img :src="require('@/assets/verified.svg')" alt="">
+                            </div>
                         </div>
                     </div>
                     <div v-else class="seller-details-not-available">
@@ -114,7 +117,8 @@ export default {
     },
     props: [
         "isOwner",
-        "property"
+        "property",
+        "isAdmin"
     ],
     data() {
         return {
@@ -122,11 +126,11 @@ export default {
         }
     },
     methods: {
+        
         chatWithSeller() {
 
-
-
             this.chatWithSellerLoading = true
+
             axiosInstance.post("/api/v1/user/conversation", {
                 propertyId: this.property.propertyId
             })
@@ -156,6 +160,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.special-row {
+    background: red;
+}
+
 .prop-details-container {
     flex: 1;
     width: 100%;
@@ -194,6 +203,7 @@ export default {
         overflow: auto;
         scrollbar-width: none;
         padding: 0 1.5em;
+
         .prop-desc {
             font-size: .9em;
             color: rgb(71, 71, 71)
@@ -269,6 +279,14 @@ export default {
                         font-weight: 600;
                         color: rgb(66, 66, 66);
                     }
+
+                    .verified {
+                        display: flex;
+
+                        img {
+                            width: 1em;
+                        }
+                    }
                 }
             }
         }
@@ -288,11 +306,22 @@ export default {
         .left {
             width: 100%;
             padding: 1em 1em 0 1em;
+
+        }
+
+        .left.noImages {
+            width: 100%;
+            height: inherit;
+            object-fit: contain;
         }
 
         .right {
             overflow: visible;
         }
     }
+}
+
+.listed-property-details .prop-details-container {
+    padding-top: 1em;
 }
 </style>

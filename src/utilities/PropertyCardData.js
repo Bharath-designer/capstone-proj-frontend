@@ -1,3 +1,5 @@
+import { measurementUnitMapValues } from "./MeasurementUnitMapValues";
+
 export const GetPropertyDetails = (property) => {
   const propertyDetails = {};
 
@@ -36,11 +38,13 @@ export const GetPropertyDetails = (property) => {
   };
   propertyDetails.priceNegotiable = {
     label: "Price Negotiable",
-    value: property.priceNegotiable,
+    value: property.priceNegotiable === true ? "Yes" : "No",
   };
   propertyDetails.price = {
     label: "Price",
-    value: `${property.price} ${property.currency}`,
+    value: `${property.price} ${property.currency} ${
+      property.pricePerUnit ? ` / ${measurementUnitMapValues[property.pricePerUnit]}` : ""
+    }`,
   };
   propertyDetails.pricePerUnit = {
     label: "Price Per Unit",
@@ -56,7 +60,7 @@ export const GetPropertyDetails = (property) => {
   };
   propertyDetails.deposit = {
     label: "Deposit",
-    value: property.deposit,
+    value: `${property.deposit} ${property.currency}`,
   };
   propertyDetails.postedOn = {
     label: "Posted On",
@@ -71,16 +75,29 @@ export const GetPropertyDetails = (property) => {
     if (property.propertyCategory == "House") {
       propertyDetails.length = {
         label: "Length",
-        value: `${property.houseDetails.length} ${property.houseDetails.measurementUnit}`,
+        value: `${property.houseDetails.length} ${
+          measurementUnitMapValues[property.houseDetails.measurementUnit]
+        }`,
       };
       propertyDetails.width = {
         label: "Width",
-        value: `${property.houseDetails.width} ${property.houseDetails.measurementUnit}`,
+        value: `${property.houseDetails.width} ${
+          measurementUnitMapValues[property.houseDetails.measurementUnit]
+        }`,
       };
-      propertyDetails.height = {
-        label: "Height",
-        value: `${property.houseDetails.height} ${property.houseDetails.measurementUnit}`,
-      };
+      if (propertyDetails.height) {
+        propertyDetails.height = {
+          label: "Height",
+          value: `${property.houseDetails.height} ${
+            measurementUnitMapValues[property.houseDetails.measurementUnit]
+          }`,
+        };
+      } else {
+        propertyDetails.height = {
+          label: "Height",
+          value: "-",
+        };
+      }
       propertyDetails.floorCount = {
         label: "Floor Count",
         value: property.houseDetails.floorCount,
@@ -91,7 +108,8 @@ export const GetPropertyDetails = (property) => {
       };
       propertyDetails.hallAndKitchenAvailable = {
         label: "Hall And Kitchen Available",
-        value: property.houseDetails.hallAndKitchenAvailable,
+        value:
+          property.houseDetails.hallAndKitchenAvailable === true ? "Yes" : "No",
       };
       propertyDetails.waterSupply = {
         label: "Water Supply",
@@ -103,19 +121,23 @@ export const GetPropertyDetails = (property) => {
       };
       propertyDetails.gatedSecurity = {
         label: "Gated Security",
-        value: property.houseDetails.gatedSecurity,
+        value: property.houseDetails.gatedSecurity === true ? "Yes" : "No",
       };
       propertyDetails.carParking = {
         label: "Car Parking",
-        value: property.houseDetails.carParking,
+        value: property.houseDetails.carParking === true ? "Yes" : "No",
       };
       propertyDetails.furnishingDetails = {
         label: "Furnishing Details",
         value: property.houseDetails.furnishingDetails,
       };
+      propertyDetails.restroomCount = {
+        label: "Restroom Count",
+        value: property.houseDetails.restroomCount,
+      };
     } else {
       propertyDetails.typesOfRooms = {
-        label: "Types Of Rooms",
+        label: "Types of Rooms",
         value: property.hostelDetails.typesOfRooms,
       };
       propertyDetails.genderPreference = {
@@ -124,11 +146,15 @@ export const GetPropertyDetails = (property) => {
       };
       propertyDetails.wifi = {
         label: "Wifi",
-        value: property.hostelDetails.wifi,
+        value: property.hostelDetails.wifi === true ? "Yes" : "No",
+      };
+      propertyDetails.food = {
+        label: "Food",
+        value: property.hostelDetails.food,
       };
       propertyDetails.gatedSecurity = {
         label: "Gated Security",
-        value: property.hostelDetails.gatedSecurity,
+        value: property.hostelDetails.gatedSecurity === true ? "Yes" : "No",
       };
     }
   }
@@ -138,25 +164,38 @@ export const GetPropertyDetails = (property) => {
       value: property.commercialDetails.commercialType,
     };
     propertyDetails.floorCount = {
-      label: "FloorCount",
+      label: "Floor Count",
       value: property.commercialDetails.floorCount,
     };
     propertyDetails.measurementUnit = {
       label: "Measurement Unit",
       value: property.commercialDetails.measurementUnit,
     };
-    propertyDetails.length = {
-      label: "Length",
-      value: property.commercialDetails.length,
-    };
     propertyDetails.width = {
       label: "Width",
-      value: property.commercialDetails.width,
+      value: `${property.commercialDetails.width} ${
+        measurementUnitMapValues[property.commercialDetails.measurementUnit]
+      }`,
     };
-    propertyDetails.height = {
-      label: "Height",
-      value: property.commercialDetails.height,
+    propertyDetails.length = {
+      label: "Length",
+      value: `${property.commercialDetails.length} ${
+        measurementUnitMapValues[property.commercialDetails.measurementUnit]
+      }`,
     };
+    if (propertyDetails.height) {
+      propertyDetails.height = {
+        label: "Height",
+        value: `${property.commercialDetails.height} ${
+          measurementUnitMapValues[property.commercialDetails.measurementUnit]
+        }`,
+      };
+    } else {
+      propertyDetails.height = {
+        label: "Height",
+        value: "-",
+      };
+    }
     propertyDetails.waterSupply = {
       label: "Water Supply",
       value: property.commercialDetails.waterSupply,
@@ -184,13 +223,17 @@ export const GetPropertyDetails = (property) => {
       label: "Measurement Unit",
       value: property.landDetails.measurementUnit,
     };
-    propertyDetails.length = {
-      label: "Length",
-      value: property.landDetails.length,
-    };
     propertyDetails.width = {
       label: "Width",
-      value: property.landDetails.width,
+      value: `${property.landDetails.width} ${
+        measurementUnitMapValues[property.landDetails.measurementUnit]
+      }`,
+    };
+    propertyDetails.length = {
+      label: "Length",
+      value: `${property.landDetails.length} ${
+        measurementUnitMapValues[property.landDetails.measurementUnit]
+      }`,
     };
     propertyDetails.zoningType = {
       label: "Zoning Type",
@@ -200,17 +243,24 @@ export const GetPropertyDetails = (property) => {
 
   if (property.propertyType == "Product") {
     propertyDetails.productType = {
-      label: "Zoning Type",
+      label: "Product Type",
       value: property.productDetails.productType,
     };
     propertyDetails.manufacturer = {
-      label: "Zoning Type",
+      label: "Manufacturer",
       value: property.productDetails.manufacturer,
     };
-    propertyDetails.warrantyPeriod = {
-      label: "Zoning Type",
-      value: property.productDetails.warrantyPeriod,
-    };
+    if (property.productDetails.warrantyPeriod !== 0) {
+      propertyDetails.warrantyPeriod = {
+        label: "Warranty Period",
+        value: `${property.productDetails.warrantyPeriod} ${property.productDetails.warrantyUnit}`,
+      };
+    } else {
+      propertyDetails.warrantyPeriod = {
+        label: "Warranty Period",
+        value: `-`,
+      };
+    }
     propertyDetails.warrantyUnit = {
       label: "Zoning Type",
       value: property.productDetails.warrantyUnit,
@@ -234,27 +284,53 @@ export const PropertyItemCardData = (property) => {
   left.push(propertyDetails.city);
   left.push(propertyDetails.state);
 
-  const right = [];
-
   if (property.listingType == "Sale") {
-    right.push(propertyDetails.price);
+    left.push(propertyDetails.price);
   }
 
   if (property.listingType == "Rent") {
-    right.push(propertyDetails.rent);
+    left.push(propertyDetails.rent);
   }
 
-  if (property.length) {
+  if (property.deposit) {
+    left.push(propertyDetails.deposit);
+  }
+
+  const right = [];
+
+  if (property.propertyCategory == "House") {
     right.push(propertyDetails.length);
-  }
-  if (property.width) {
     right.push(propertyDetails.width);
-  }
-
-  if (property.height) {
     right.push(propertyDetails.height);
+    right.push(propertyDetails.roomCount);
+    right.push(propertyDetails.hallAndKitchenAvailable);
   }
 
+  if (property.propertyCategory == "Hostel") {
+    right.push(propertyDetails.typesOfRooms);
+    right.push(propertyDetails.food);
+    right.push(propertyDetails.wifi);
+  }
+
+  if (property.propertyType == "Commercial") {
+    right.push(propertyDetails.commercialType);
+    right.push(propertyDetails.length);
+    right.push(propertyDetails.width);
+    right.push(propertyDetails.height);
+    right.push(propertyDetails.floorCount);
+  }
+
+  if (property.propertyType == "Product") {
+    right.push(propertyDetails.productType);
+    right.push(propertyDetails.manufacturer);
+    right.push(propertyDetails.warrantyPeriod);
+  }
+
+  if (property.propertyType == "Land") {
+    right.push(propertyDetails.length);
+    right.push(propertyDetails.width);
+    right.push(propertyDetails.zoningType);
+  }
   return { left, right };
 };
 
@@ -275,25 +351,123 @@ export const PropertyDetailsCardData = (property) => {
   basicLeft.push(propertyDetails.city);
   basicLeft.push(propertyDetails.state);
 
-  basicRight.push(propertyDetails.listingType)
+  if (property.propertyCategory == "House") {
+    basicLeft.push(propertyDetails.listingType);
 
-  if (property.listingType == "Sale") {
-    basicRight.push(propertyDetails.price);
-  }
+    if (property.listingType == "Sale") {
+      basicLeft.push(propertyDetails.price);
+    }
 
-  if (property.listingType == "Rent") {
-    basicRight.push(propertyDetails.rent);
-  }
+    if (property.listingType == "Rent") {
+      basicLeft.push(propertyDetails.rent);
+    }
 
-  if (property.length) {
+    if (property.deposit) {
+      basicLeft.push(propertyDetails.deposit);
+    }
+
     basicRight.push(propertyDetails.length);
-  }
-  if (property.width) {
     basicRight.push(propertyDetails.width);
+    basicRight.push(propertyDetails.height);
+    basicRight.push(propertyDetails.roomCount);
+    basicRight.push(propertyDetails.hallAndKitchenAvailable);
+    basicRight.push(propertyDetails.floorCount);
+    basicRight.push(propertyDetails.restroomCount);
+    basicRight.push(propertyDetails.priceNegotiable);
+
+    amenitiesLeft.push(propertyDetails.waterSupply);
+    amenitiesLeft.push(propertyDetails.carParking);
+    amenitiesLeft.push(propertyDetails.furnishingDetails);
+    amenitiesRight.push(propertyDetails.electricity);
+    amenitiesRight.push(propertyDetails.gatedSecurity);
   }
 
-  if (property.height) {
+  if (property.propertyCategory == "Hostel") {
+    basicRight.push(propertyDetails.listingType);
+
+    if (property.listingType == "Sale") {
+      basicRight.push(propertyDetails.price);
+    }
+
+    if (property.listingType == "Rent") {
+      basicRight.push(propertyDetails.rent);
+    }
+
+    if (property.deposit) {
+      basicRight.push(propertyDetails.deposit);
+    }
+    basicRight.push(propertyDetails.genderPreference);
+    basicRight.push(propertyDetails.typesOfRooms);
+
+    amenitiesLeft.push(propertyDetails.food);
+    amenitiesLeft.push(propertyDetails.wifi);
+    amenitiesRight.push(propertyDetails.gatedSecurity);
+  }
+
+  if (property.propertyType == "Commercial") {
+    if (property.listingType == "Sale") {
+      basicLeft.push(propertyDetails.price);
+    }
+
+    if (property.listingType == "Rent") {
+      basicLeft.push(propertyDetails.rent);
+    }
+
+    if (property.deposit) {
+      basicLeft.push(propertyDetails.deposit);
+    }
+
+    basicLeft.push(propertyDetails.commercialType);
+    basicRight.push(propertyDetails.length);
+    basicRight.push(propertyDetails.width);
     basicRight.push(propertyDetails.height);
+    basicRight.push(propertyDetails.floorCount);
+    basicRight.push(propertyDetails.restroomCount);
+
+    amenitiesLeft.push(propertyDetails.carParking);
+    amenitiesLeft.push(propertyDetails.gatedSecurity);
+    amenitiesRight.push(propertyDetails.waterSupply);
+    amenitiesRight.push(propertyDetails.electricity);
+  }
+
+  if (property.propertyType == "Product") {
+    if (property.listingType == "Sale") {
+      basicLeft.push(propertyDetails.price);
+    }
+
+    if (property.listingType == "Rent") {
+      basicLeft.push(propertyDetails.rent);
+    }
+
+    if (property.deposit) {
+      basicLeft.push(propertyDetails.deposit);
+    }
+
+    basicRight.push(propertyDetails.priceNegotiable);
+
+    basicRight.push(propertyDetails.productType);
+    basicRight.push(propertyDetails.manufacturer);
+    basicRight.push(propertyDetails.warrantyPeriod);
+  }
+
+  if (property.propertyType == "Land") {
+    if (property.listingType == "Sale") {
+      basicRight.push(propertyDetails.price);
+    }
+
+    if (property.listingType == "Rent") {
+      basicRight.push(propertyDetails.rent);
+    }
+
+    if (property.deposit) {
+      basicRight.push(propertyDetails.deposit);
+    }
+
+    basicRight.push(propertyDetails.priceNegotiable);
+
+    basicRight.push(propertyDetails.length);
+    basicRight.push(propertyDetails.width);
+    basicRight.push(propertyDetails.zoningType);
   }
 
   return { basicLeft, basicRight, amenitiesLeft, amenitiesRight };

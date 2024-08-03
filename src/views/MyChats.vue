@@ -1,6 +1,6 @@
 <template>
     <div class="chat-wrapper" :class="{ 'show-conversation': showConversation }">
-        <div v-loading="conversationsLoading" v-infinite-scroll="getConversations"
+        <div v-loading="conversationsLoading" :infinite-scroll-distance="50" v-infinite-scroll="getConversations"
             :infinite-scroll-disabled="disablePagination" class="conversation-container">
             <div @click="openMessages(conversation)" v-for="conversation in conversationList" class="conversation-item"
                 :class="{ active: $route.params.conversationId == conversation.conversationId }">

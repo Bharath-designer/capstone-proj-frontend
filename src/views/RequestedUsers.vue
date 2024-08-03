@@ -1,5 +1,5 @@
 <template>
-    <div class="requested-user-wrapper">
+    <div v-loading="requestedUsersLoading" class="requested-user-wrapper">
         <div v-for="user in requestedUsers" class="user-item">
             <div class="header">
                 <div class="username">
@@ -27,7 +27,9 @@
                 </div>
             </div>
         </div>
-
+        <div v-if="requestedUsers.length === 0" class="no-users-requested">
+            No Users Requested
+        </div>
     </div>
 </template>
 
@@ -52,7 +54,7 @@ export default {
                     this.requestedUsers = res.data
                 })
                 .catch(err => {
-                    if (err?.response.status === 400) {
+                    if (err?.response?.status === 400) {
                         this.$router.replace({ name: "My Listings" })
                     }
                 })
@@ -147,7 +149,14 @@ export default {
 
     .user-item:hover {
         background: rgb(229, 229, 229);
-
     }
+
+    .no-users-requested {
+        padding: 2em 1em;
+        text-align: center;
+        font-size: .85em;
+        color: rgb(77, 77, 77);
+    }
+
 }
 </style>

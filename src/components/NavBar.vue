@@ -5,7 +5,7 @@
             <img @click="goToHome" :src="require('../assets/Brokerless_Logo.svg')" alt="">
         </div>
         <div class="nav-right-container">
-            <button v-if="showPostYourPropertyBtn" class="post-property-btn">
+            <button v-if="showPostYourPropertyBtn" @click="goToPostProperty" class="post-property-btn">
                 Post your property
             </button>
             <button v-if="user == null" @click="toggleGoogleLoginPopup" class="login-btn">
@@ -64,12 +64,16 @@ export default {
         }
     },
     methods: {
+        goToPostProperty() {
+            this.$router.push({ name: "Add Property" })
+        },
         handleImageError(event) {
             event.target.src = require("@/assets/profile-fallback.jpg");
         },
 
         goToProfile() {
-            this.$router.push({ name: "Basic Profile" })
+            if (this.user?.userRole === 'User')
+                this.$router.push({ name: "Basic Profile" })
         },
         goToHome() {
             this.$router.push({ name: "Home" })

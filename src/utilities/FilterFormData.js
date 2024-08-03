@@ -17,6 +17,17 @@ export const filterSortOptions = [
     },
 ]
 
+export const approvalOptions = [
+    {
+        label: "Approved",
+        value: true
+    },
+    {
+        label: "Not Approved",
+        value: false
+    },
+]
+
 
 export const filterPropertyTypeOptions = [
     {

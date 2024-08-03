@@ -64,7 +64,7 @@ export default {
                     this.messages = res.data
                 })
                 .catch(err => {
-                    if (err?.response.status === 400) {
+                    if (err?.response?.status === 400) {
                         this.$router.replace({ name: "My Chats" })
                     }
                 })

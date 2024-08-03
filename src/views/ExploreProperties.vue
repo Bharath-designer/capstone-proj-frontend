@@ -6,11 +6,10 @@
             </div>
             <div class="filter-content">
                 <div v-for="formItem in dynamicFormRender" class="filter-element">
-                    <el-form-item :label="formItem.formLabel" label-position="top"
-                        size="large">
+                    <el-form-item :label="formItem.formLabel" label-position="top" size="large">
                         <el-select clearable v-if="formItem.type == 'select'" v-model="filterData[formItem.vModel]"
                             :placeholder="'Select ' + formItem.formLabel" :multiple="formItem.multiple"
-                            :remote="formItem.remote" :filterable="formItem.remote"
+                            :remote="formItem.remote" :filterable="formItem.remote || formItem.filterable"
                             :remote-method="formItem.remoteMethod" :loading="formItem.remoteLoading">
                             <el-option v-for="item in formItem.selectOptions"
                                 :key="formItem.selectValue ? item[formItem.selectValue] : item"
@@ -29,13 +28,18 @@
                 <span @click="applyFilter" class="apply-filter">Apply filter</span>
             </div>
         </div>
-        <div v-infinite-scroll="getProperties" :infinite-scroll-disabled="disablePropertiesPagination" class="right">
-            <PropertyItemCard v-for="propertyItem in properties" :property="propertyItem" :redirectFunction="() => $router.push({
-                name: 'PropertyDetails', params: {
-                    propertyId:
-                        propertyItem.propertyId
-                }
-            })" />
+        <div v-if="properties.length === 0 && !propertiesLoading" class="right no-properties">
+            No Properties found
+        </div>
+        <div v-infinite-scroll="getProperties" :infinite-scroll-immediate="false" :infinite-scroll-distance="50"
+            :infinite-scroll-disabled="disablePropertiesPagination" v-else class="right">
+            <PropertyItemCard :isAdmin="isAdmin" v-for="propertyItem in properties" :property="propertyItem"
+                :redirectFunction="() => $router.push({
+                    name: 'PropertyDetails', params: {
+                        propertyId:
+                            propertyItem.propertyId
+                    }
+                })" />
             <div v-if="propertiesLoading" class="property-loader" v-loading="propertiesLoading">
             </div>
         </div>
@@ -48,7 +52,8 @@
 
 import axiosInstance from '@/axiosInterceptor';
 import PropertyItemCard from '@/components/PropertyItemCard.vue';
-import { filterSortOptions, filterPropertyTypeOptions, filterPropertyCategoryOptions } from '@/utilities/FilterFormData';
+import { filterSortOptions, filterPropertyTypeOptions, filterPropertyCategoryOptions, approvalOptions } from '@/utilities/FilterFormData';
+import states from '@/utilities/StateList';
 
 export default {
     components: {
@@ -62,7 +67,8 @@ export default {
                 propertyCategory: "",
                 state: "",
                 city: "",
-                tags: []
+                tags: [],
+                isApproved: ""
             },
             tagOptions: [],
             tagsLoading: true,
@@ -87,8 +93,14 @@ export default {
                     this.tagsLoading = false
                 })
         },
-        buildQuertyString() {
+        buildQueryString() {
             let queryString = "?"
+
+            if (this.isAdmin) {
+                if (this.filterData.isApproved === true || this.filterData.isApproved === false) {
+                    queryString += `isApproved=${this.filterData.isApproved}&`
+                }
+            }
 
             if (this.filterData.city) {
                 queryString += `city=${this.filterData.city}&`
@@ -111,16 +123,63 @@ export default {
                 })
             }
 
-            queryString += `pagenumber=${this.pageNumber}`
-
-            return queryString;
+            return queryString
 
         },
-        getProperties() {
-            const queryString = this.buildQuertyString()
+        syncQueryStringWithUrl(useUrlQuery) {
+
+
+            if (useUrlQuery) {
+                const query = this.$route.query
+
+                if (query.isApproved !== undefined) {
+                    this.filterData.isApproved = query.isApproved === 'true'
+                }
+                if (query.city) {
+                    this.filterData.city = query.city
+                }
+                if (query.state) {
+                    this.filterData.state = query.state
+                }
+                if (query.propertyCategory) {
+                    this.filterData.propertyCategory = query.propertyCategory
+                }
+                if (query.propertyType) {
+                    this.filterData.propertyType = query.propertyType
+                }
+                if (query.orderby) {
+                    this.filterData.sortBy = query.orderby
+                }
+                if (query.tags) {
+                    this.filterData.tags = Array.isArray(query.tags) ? query.tags : [query.tags]
+                }
+
+            } else {
+                let obj = {}
+                Object.keys(this.filterData).forEach(filter => {
+                    if (this.filterData[filter] !== "" || this.filterData[filter] !== "") {
+                        obj[filter] = this.filterData[filter]
+                    }
+                })
+                if (obj.sortBy === "datedesc") {
+                    delete obj.sortBy
+                }
+                this.$router.push({ query: obj })
+            }
+
+            let query = this.buildQueryString()
+
+            query += `pagenumber=${this.pageNumber}`
+            return query;
+
+        },
+        getProperties(useUrlQuery) {
+            const queryString = this.syncQueryStringWithUrl(useUrlQuery)
             this.propertiesLoading = true
 
-            axiosInstance(`/api/v1/property${queryString}`)
+            const url = this.isAdmin ? `/api/v1/admin/property${queryString}` : `/api/v1/property${queryString}`
+
+            axiosInstance(url)
                 .then(res => {
                     if (res.data.length == 0) {
                         this.noMoreProperties = true
@@ -150,39 +209,57 @@ export default {
                 propertyCategory: "",
                 state: "",
                 city: "",
-                tags: []
+                tags: [],
+                isApproved: ""
             }
             this.applyFilter()
         }
     },
     computed: {
+        isAdmin() {
+            return this.$store.state.user?.userRole === 'Admin'
+        },
         disablePropertiesPagination() {
             return this.propertiesLoading || this.noMoreProperties
         },
         dynamicFormRender() {
+            const data = [
+
+            ]
 
             if (!this.filterData.propertyType) {
                 this.filterData.propertyCategory = ""
             }
 
-            const data = [
-                {
-                    formLabel: "Sort by",
-                    vModel: "sortBy",
+            if (this.isAdmin) {
+                data.push({
+                    formLabel: "Property Approval Status",
+                    vModel: "isApproved",
                     type: "select",
-                    selectOptions: filterSortOptions,
+                    selectOptions: approvalOptions,
                     selectLabel: "label",
                     selectValue: "value"
-                },
-                {
-                    formLabel: "Property Type",
-                    vModel: "propertyType",
-                    type: "select",
-                    selectOptions: filterPropertyTypeOptions,
-                    selectLabel: "label",
-                    selectValue: "value"
-                },
-            ]
+                })
+            }
+
+            data.push({
+                formLabel: "Sort by",
+                vModel: "sortBy",
+                type: "select",
+                selectOptions: filterSortOptions,
+                selectLabel: "label",
+                selectValue: "value"
+            })
+
+            data.push({
+                formLabel: "Property Type",
+                vModel: "propertyType",
+                type: "select",
+                selectOptions: filterPropertyTypeOptions,
+                selectLabel: "label",
+                selectValue: "value"
+            })
+
 
             if (this.filterData.propertyType == "residential") {
                 data.push({
@@ -199,7 +276,9 @@ export default {
             data.push({
                 formLabel: "State",
                 vModel: "state",
-                type: "text",
+                type: "select",
+                selectOptions: states,
+                filterable: true
             })
             data.push({
                 formLabel: "City",
@@ -223,6 +302,7 @@ export default {
     },
     beforeMount() {
         this.getTags()
+        this.getProperties(true)
     }
 
 }
@@ -352,6 +432,13 @@ export default {
             height: 8em;
         }
 
+    }
+
+    .no-properties {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: rgb(92, 92, 92);
     }
 
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="my-listings-wrapper">
-        <PropertyItemCard v-for="propertyItem in listings"
+    <div v-loading="listingsLoading" class="my-listings-wrapper">
+        <PropertyItemCard :isMyListings="true" v-for="propertyItem in listings"
             :redirectFunction="() => $router.push({ name: 'ListedPropertyDetails', params: { propertyId: propertyItem.propertyId } })"
             :property="propertyItem" />
     </div>
