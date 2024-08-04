@@ -5,9 +5,12 @@
             <img @click="goToHome" :src="require('../assets/Brokerless_Logo.svg')" alt="">
         </div>
         <div class="nav-right-container">
-            <button v-if="showPostYourPropertyBtn" @click="goToPostProperty" class="post-property-btn">
-                Post your property
-            </button>
+            <el-tooltip v-if="showPostYourPropertyBtn" class="box-item" :disabled="user !== null"
+                effect="dark" content="Login to post property" placement="bottom-start">
+                <button @click="goToPostProperty" :disabled="user === null" class="post-property-btn">
+                    Post your property
+                </button>
+            </el-tooltip>
             <button v-if="user == null" @click="toggleGoogleLoginPopup" class="login-btn">
                 Login
             </button>
@@ -41,7 +44,7 @@ export default {
             return this.$store.state.user
         },
         showPostYourPropertyBtn() {
-            return this.$route.name === "Home"
+            return this.$route.name === "Home" && this.user?.userRole !== 'Admin'
         },
         showMenu() {
             return this.$route.path.startsWith("/profile") || this.$route.name == 'Property'

@@ -6,7 +6,9 @@
             </span>
             <span class="page-title">{{ pageTitle }}</span>
         </div>
-        <div class="add-edit-content" v-loading="editPropertyDataLoading">
+        <div v-if="pageLoading" class="add-edit-content" v-loading="editPropertyDataLoading">
+        </div>
+        <div v-else class="add-edit-content">
             <el-form ref="propertyForm" class="form" :model="propertyValues" label-position="top" :rules="rules"
                 label-width="auto" size="default" status-icon>
                 <div class="form-content">
@@ -281,7 +283,8 @@ export default {
             propertyUpdateLoading: false,
             editPropertyDataLoading: false,
             defaultValuesUpdated: false,
-            tagsCopy: []
+            tagsCopy: [],
+            pageLoading: true
         }
     },
     computed: {
@@ -772,6 +775,7 @@ export default {
                         this.defaultValuesUpdated = true
                     })
 
+
                 })
                 .catch(err => {
                     if (err?.response?.status === 400) {
@@ -779,6 +783,7 @@ export default {
                     }
                 })
                 .finally(() => {
+                    this.pageLoading = false
                     this.editPropertyDataLoading = false
                 })
 
@@ -1013,13 +1018,15 @@ export default {
         if (!isUser) {
             this.$router.replace({ name: "Home" })
         }
-
-        if (this.pageTitle == 'Edit Property') {
-            this.getAndUpdateData()
-        } else {
-            nextTick(() => {
-                this.defaultValuesUpdated = true
-            })
+        else {
+            if (this.pageTitle == 'Edit Property') {
+                this.getAndUpdateData()
+            } else {
+                this.pageLoading = false
+                nextTick(() => {
+                    this.defaultValuesUpdated = true
+                })
+            }
         }
     }
 }
