@@ -45,12 +45,12 @@ export const measurementUnit = [
   "Yard",
   "Inch",
   "Mile",
-  // "SquareFoot",
-  // "SquareMeter",
-  // "Kilometer",
-  // "Acre",
-  // "CubicFoot",
-  // "CubicMeter",
+  "SquareFoot",
+  "SquareMeter",
+  "Kilometer",
+  "Acre",
+  "CubicFoot",
+  "CubicMeter",
 ];
 
 export const currencyList = ["INR", "USD"];

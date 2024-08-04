@@ -5,7 +5,7 @@
                 Property is will be published once Admin approves.
             </el-tag>
         </div>
-        <PropertyDetailsComponent v-if="propertyDetails" :property="propertyDetails" :isOwner="true" />
+        <PropertyDetailsComponent :propertyLoading="propertyLoading" :property="propertyDetails" :isOwner="true" />
     </div>
 </template>
 

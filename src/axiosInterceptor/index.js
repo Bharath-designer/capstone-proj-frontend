@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  // baseURL: 'http://192.168.31.198:7777'
-  baseURL: 'http://localhost:4000'
+  // baseURL: 'http://localhost:4000'
+  baseURL: 'https://brokerlessappservicebharath.azurewebsites.net'
 });
 
 axiosInstance.interceptors.request.use(

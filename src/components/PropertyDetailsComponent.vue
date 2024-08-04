@@ -1,5 +1,7 @@
 <template>
-    <div class="prop-details-container">
+    <div v-if="propertyLoading" v-loading="propertyLoading" class="prop-details-container">
+        </div>
+    <div v-else-if="property" class="prop-details-container">
         <div class="left" :class="{ noImages: property?.files?.length == 0 }">
             <el-carousel v-if="property?.files?.length > 0" effect="dark" indicator-position="none"
                 style="height: 100%;" autoplay arrow="always" :motion-blue="true">
@@ -126,7 +128,8 @@ export default {
     props: [
         "isOwner",
         "property",
-        "isAdmin"
+        "isAdmin",
+        "propertyLoading"
     ],
     data() {
         return {

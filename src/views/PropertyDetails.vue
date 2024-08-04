@@ -26,7 +26,7 @@
                     style=" --el-switch-off-color: black" />
             </div>
         </div>
-        <PropertyDetailsComponent v-if="property" :property="property" :is-owner="false" :isAdmin="isAdmin" />
+        <PropertyDetailsComponent :propertyLoading="propertyLoading" :property="property" :is-owner="false" :isAdmin="isAdmin" />
 
     </div>
 </template>
