@@ -3,6 +3,9 @@
         <PropertyItemCard :isMyListings="true" v-for="propertyItem in listings"
             :redirectFunction="() => $router.push({ name: 'ListedPropertyDetails', params: { propertyId: propertyItem.propertyId } })"
             :property="propertyItem" />
+            <div v-if="listings.length === 0" class="no-item-found">
+                You have no property posted
+            </div>
     </div>
 </template>
 
@@ -29,7 +32,7 @@ export default {
                     this.listings = res.data
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     this.listingsLoading = false

@@ -54,7 +54,7 @@ export default {
     },
     computed: {
         user() {
-            console.log(this.$store.state.user);
+            // console.log(this.$store.state.user);
             return this.$store.state.user
         }
     },
@@ -80,7 +80,7 @@ export default {
                     this.tags = res.data
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     this.tagsLoading = false

@@ -37,7 +37,7 @@ export default {
                     this.closeDialog()
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
         },
         googleOAuthErrorCallback(error) {

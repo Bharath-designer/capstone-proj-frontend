@@ -21,6 +21,7 @@
             <div class="prop-highlight-tag">
                 <el-tag type="success" effect="light">{{ property.listingType }}</el-tag>
                 <el-tag v-if="property.priceNegotiable" type="warning" effect="light">Price Negotiable</el-tag>
+                <el-tag v-if="property?.propertyStatus === 'Inactive'" type="error" effect="light">Inactive</el-tag>
                 <el-tag v-if="property.hostelDetails?.genderPreference" type="primary" effect="light">{{
                     property.hostelDetails?.genderPreference }}</el-tag>
             </div>

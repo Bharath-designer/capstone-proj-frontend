@@ -14,14 +14,14 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   function (error) {
-    console.log("[INTERCEPTOR]", error);
+    // console.log("[INTERCEPTOR]", error);
     return Promise.reject(error);
   }
 );
 
 
 axiosInstance.interceptors.response.use(config => config, (error) => {
-  console.log("[INTERCEPTOR]", error);
+  // console.log("[INTERCEPTOR]", error);
   if ([401, 403].includes(error.response?.status)) {
     // localStorage.clear()
     location.replace("/")

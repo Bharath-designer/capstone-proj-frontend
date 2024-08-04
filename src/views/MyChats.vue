@@ -21,6 +21,9 @@
                     </div>
                 </div>
             </div>
+            <div v-if="conversationList.length === 0" class="no-item-found">
+                You have no conversation
+            </div>
         </div>
         <div class="chat-window-container">
             <div class="chat-window-content">
@@ -66,7 +69,7 @@ export default {
                     this.pageNumber++
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     this.conversationsLoading = false

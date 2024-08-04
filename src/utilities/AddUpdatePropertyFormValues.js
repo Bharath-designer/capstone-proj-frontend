@@ -40,17 +40,17 @@ export const listingTypeOptions = [
 ];
 
 export const measurementUnit = [
-  "SquareFoot",
-  "SquareMeter",
-  "Acre",
-  "CubicFoot",
-  "CubicMeter",
   "Foot",
   "Meter",
   "Yard",
   "Inch",
   "Mile",
-  "Kilometer",
+  // "SquareFoot",
+  // "SquareMeter",
+  // "Kilometer",
+  // "Acre",
+  // "CubicFoot",
+  // "CubicMeter",
 ];
 
 export const currencyList = ["INR", "USD"];

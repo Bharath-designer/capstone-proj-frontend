@@ -8,7 +8,7 @@
                 <span>Property Details</span>
             </div>
             <div v-if="!isAdmin" class="header-right">
-                <el-tooltip v-if="!propertyLoading && property" class="box-item" :disabled="userSessionDetails !== null"
+                <el-tooltip v-if="!propertyLoading && property?.sellerDetails == null" class="box-item" :disabled="userSessionDetails !== null"
                     effect="dark" content="Login to request details" placement="bottom-start">
                     <button v-if="property?.sellerDetails == null"
                         :disabled="propertyRequestLoading || !userSessionDetails" @click="requestProperty"
@@ -89,7 +89,7 @@ export default {
                     this.getPropertyDetails()
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                     if (err?.response?.status == 400) {
                         ElNotification({
                             message: err.response.data.message,

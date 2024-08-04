@@ -405,6 +405,8 @@ export const PropertyDetailsCardData = (property) => {
   }
 
   if (property.propertyType == "Commercial") {
+    basicLeft.push(propertyDetails.listingType);
+
     if (property.listingType == "Sale") {
       basicLeft.push(propertyDetails.price);
     }
@@ -431,6 +433,8 @@ export const PropertyDetailsCardData = (property) => {
   }
 
   if (property.propertyType == "Product") {
+    basicLeft.push(propertyDetails.listingType);
+
     if (property.listingType == "Sale") {
       basicLeft.push(propertyDetails.price);
     }
@@ -451,6 +455,8 @@ export const PropertyDetailsCardData = (property) => {
   }
 
   if (property.propertyType == "Land") {
+    basicRight.push(propertyDetails.listingType);
+
     if (property.listingType == "Sale") {
       basicRight.push(propertyDetails.price);
     }

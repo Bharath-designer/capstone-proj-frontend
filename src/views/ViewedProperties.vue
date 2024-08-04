@@ -4,7 +4,9 @@
             :redirectFunction="() => $router.push({ name: 'PropertyDetails', params: { propertyId:
                 propertyItem.propertyId }})"
             :property="propertyItem" />
-
+            <div v-if="properties.length === 0" class="no-item-found">
+                You have no property requested
+            </div>
     </div>
 </template>
 
@@ -31,7 +33,7 @@ import PropertyItemCard from '@/components/PropertyItemCard.vue';
                     this.properties = res.data
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     this.propertiesLoading = false

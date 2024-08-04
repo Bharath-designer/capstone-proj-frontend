@@ -11,7 +11,7 @@
             </div>
             <div class="convo-name">{{ messages.conversationDetails.conversationName }}</div>
         </div>
-        <div ref="chatWindow" class="chat-message-container">
+        <div ref="chatWindow" class="chat-message-container" :class="{ smooth: animateScroll }">
             <div v-for="chat in messages.chats" class="chat" :class="{ rightAlign: chat.isSentByUser }">
                 <div class="message">{{ chat.message }}</div>
                 <div class="time">{{ parseDateStringWithTime(chat.createdOn) }}</div>
@@ -36,6 +36,7 @@ export default {
             messagesLoading: true,
             messageText: "",
             parseDateStringWithTime,
+            animateScroll: false
         }
     },
     watch: {
@@ -57,7 +58,12 @@ export default {
         getMessges(id, disableLoad) {
             if (!disableLoad) {
                 this.messagesLoading = true
+                this.animateScroll = false
+            }  else {
+                this.animateScroll = true
             }
+            
+
             axiosInstance(`/api/v1/user/message/${id}`)
                 .then(res => {
                     res.data.chats.reverse()
@@ -73,7 +79,6 @@ export default {
                 })
         },
         sendMessage() {
-
             if (!this.messageText) return;
 
             axiosInstance.post("/api/v1/user/message",
@@ -87,7 +92,7 @@ export default {
                     this.getMessges(this.$route.params.conversationId, true)
                 })
                 .catch(err => {
-                    console.log(err.response);
+                    // console.log(err.response);
                 })
                 .finally(() => {
 
@@ -96,7 +101,6 @@ export default {
     },
     beforeMount() {
         this.getMessges(this.$route.params.conversationId)
-
         this.emitter.on("getConversationMessages", this.getMessges)
     }
 }
@@ -155,7 +159,6 @@ export default {
         flex: 1;
         overflow: auto;
         scrollbar-width: none;
-        scroll-behavior: smooth;
 
         .chat {
             display: flex;
@@ -185,6 +188,10 @@ export default {
             background: rgb(200, 254, 200);
         }
 
+    }
+
+    .chat-message-container.smooth {
+        scroll-behavior: smooth;
     }
 
     .chat-footer {

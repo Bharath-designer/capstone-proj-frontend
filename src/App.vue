@@ -44,7 +44,7 @@ export default {
 				this.$store.commit("updateUser", { userName, profilePic, userRole })
 			})
 			.catch(err => {
-				console.log(err);
+				// console.log(err);
 			})
 			.finally(() => {
 				cancelLoading()

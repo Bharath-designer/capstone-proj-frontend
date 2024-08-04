@@ -30,7 +30,7 @@ export default {
             axiosInstance(`/api/v1/user/listings/${this.$route.params.propertyId}`)
                 .then(res => {
                     this.propertyDetails = res.data
-                    console.log(res.data);
+                    // console.log(res.data);
                 })
                 .catch(err => {
 

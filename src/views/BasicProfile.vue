@@ -106,9 +106,14 @@
                             <div class="limit-label">Property Viewing Limit:</div>
                             <div class="limit-value">{{ template.maxViewingCount }}</div>
                         </div>
+                        <div v-if="template.price" class="limit-row">
+                            <div class="limit-label">Price:</div>
+                            <div class="limit-value">{{ template.price }} INR</div>
+                        </div>
                         <div class="limit-row">
                             <div class="limit-label">Validity:</div>
-                            <div class="limit-value">{{ template.validity }} days</div>
+                            <div v-if="template.validity" class="limit-value">{{ template.validity }} days</div>
+                            <div v-else class="limit-value">No Limit</div>
                         </div>
                     </div>
                     <button :disabled="paymentLoading" v-if="template.upgradeBtn" @click="upgradePlan(template.name)"
@@ -169,15 +174,17 @@ export default {
                 maxViewingCount: 10,
                 price: "499",
                 validity: 28,
-                upgradeBtn: true
+                upgradeBtn: true,
+
             },
             {
                 name: "Gold",
                 maxListingCount: 50,
                 maxViewingCount: 50,
-                price: "499",
+                price: "999",
                 validity: 28,
-                upgradeBtn: true
+                upgradeBtn: true,
+
             }
             ]
 
@@ -247,7 +254,7 @@ export default {
                     this.profileDetails = res.data
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     this.basicProfileLoading = false
@@ -266,7 +273,7 @@ export default {
                     this.showAddMobileInput = false
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                     if (err?.response?.status == 400) {
                         const errorObj = err.response.data.error
                         ElNotification({
@@ -286,7 +293,7 @@ export default {
                     this.getBasicProfileDetails()
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                     if (err?.response?.status == 400) {
                         ElNotification({
                             message: err.response.data.message,

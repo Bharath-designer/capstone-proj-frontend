@@ -18,3 +18,10 @@ html {
 body {
     background: #d5d5d5;
 }
+
+.no-item-found {
+    font-size: .85em;
+    color: rgb(59, 59, 59);
+    text-align: center;
+    padding: 2em 1em;
+}

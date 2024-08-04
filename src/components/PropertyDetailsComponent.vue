@@ -3,7 +3,7 @@
         <div class="left" :class="{ noImages: property?.files?.length == 0 }">
             <el-carousel v-if="property?.files?.length > 0" effect="dark" indicator-position="none"
                 style="height: 100%;" autoplay arrow="always" :motion-blue="true">
-                <el-carousel-item v-for="image in property.files">
+                <el-carousel-item :key="image" v-for="image in property.files">
                     <img class="property-media" v-if="image.fileType == 'Image'" :src="image.fileUrl" />
                     <video muted class="property-media" v-else :src="image.fileUrl" autoplay></video>
                 </el-carousel-item>
@@ -101,6 +101,14 @@
                     </div>
                 </div>
             </div>
+            <div v-if="property.tags?.length > 0" class="section">
+                <div class="section-title">
+                    Tags
+                </div>
+                <div class="tag-container section-content">
+                    <el-tag effect="light" size="default" type="primary" v-for="tag in property.tags">{{ tag }}</el-tag>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -126,7 +134,7 @@ export default {
         }
     },
     methods: {
-        
+
         chatWithSeller() {
 
             this.chatWithSellerLoading = true
@@ -138,7 +146,7 @@ export default {
                     this.$router.push({ name: "Chat Window", params: { conversationId: res.data.conversationId } })
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     this.chatWithSellerLoading = false
@@ -160,7 +168,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .special-row {
     background: red;
 }
@@ -288,6 +295,12 @@ export default {
                         }
                     }
                 }
+            }
+
+            .tag-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: .5em;
             }
         }
 

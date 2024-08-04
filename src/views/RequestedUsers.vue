@@ -72,7 +72,7 @@ export default {
                     this.$router.push({ name: "Chat Window", params: { conversationId: res.data.conversationId } })
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 })
                 .finally(() => {
                     user.chatLoading = false
