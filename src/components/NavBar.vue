@@ -14,8 +14,11 @@
             <button v-if="user == null" @click="toggleGoogleLoginPopup" class="login-btn">
                 Login
             </button>
-            <button @click="goToProfile" v-else-if="!disableProfileIcon" class="profile-icon">
+            <button @click="goToProfile" v-else-if="!disableProfileIcon" class="profile-icon" :class="{isAdmin: user?.userRole === 'Admin'}">
                 <img @error="handleImageError" draggable="false" :src="user.profilePic">
+                <div @click="logoutUser" class="logout-admin">
+                    Logout
+                </div>
             </button>
             <button v-if="showMenu" class="nav-icon" @click="toggleNavbar">
                 <img class="close" v-if="isNavBarOpen" :src="require('@/assets/close.svg')" alt="">
@@ -67,6 +70,12 @@ export default {
         }
     },
     methods: {
+        logoutUser() {
+            localStorage.clear()
+            document.cookie = ""
+            this.$router.replace({ name: "Home" })
+            this.$store.state.user = null
+        },
         goToPostProperty() {
             this.$router.push({ name: "Add Property" })
         },
@@ -119,6 +128,7 @@ export default {
             gap: 1em;
         }
 
+
         button {
             border: none;
             outline: none;
@@ -128,6 +138,7 @@ export default {
 
         .profile-icon {
             display: flex;
+            position: relative;
 
             img {
                 width: 2.5em;
@@ -137,6 +148,21 @@ export default {
                 object-fit: cover;
                 object-position: top;
             }
+        }
+
+        .profile-icon.isAdmin:hover .logout-admin {
+            display: block;
+        }
+        
+        .logout-admin {
+            display: none;
+            position: absolute;
+            top: calc(100%);
+            right: 0;
+            padding: .5em 1em;
+            background: white;
+            box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.596);
+            border-radius: .25em;
         }
 
         .post-property-btn {
