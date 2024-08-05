@@ -1,12 +1,10 @@
 <template>
     <div v-loading="propertiesLoading" class="viewed-property-wrapper">
-        <PropertyItemCard v-for="propertyItem in properties"
-            :redirectFunction="() => $router.push({ name: 'PropertyDetails', params: { propertyId:
-                propertyItem.propertyId }})"
+        <PropertyItemCard v-for="propertyItem in properties" :redirectFunction="redirectFunction(propertyItem)"
             :property="propertyItem" />
-            <div v-if="properties.length === 0" class="no-item-found">
-                You have no property requested
-            </div>
+        <div v-if="properties.length === 0" class="no-item-found">
+            You have no property requested
+        </div>
     </div>
 </template>
 
@@ -14,8 +12,8 @@
 import axiosInstance from '@/axiosInterceptor';
 import PropertyItemCard from '@/components/PropertyItemCard.vue';
 
-    export default {
-        components: {
+export default {
+    components: {
         PropertyItemCard
     },
     data() {
@@ -38,21 +36,34 @@ import PropertyItemCard from '@/components/PropertyItemCard.vue';
                 .finally(() => {
                     this.propertiesLoading = false
                 })
+        },
+        redirectFunction(propertyItem) {
+            
+            if (propertyItem?.isApproved === true) {
+                return () => {
+                    this.$router.push({
+                        name: 'PropertyDetails', params: {
+                            propertyId:
+                            propertyItem.propertyId
+                        }
+                    })
+                }
+            } else {
+                return null
+            }
         }
     },
     beforeMount() {
         this.getMyRequestedProperties()
     }
-    }
+}
 </script>
 
 <style scoped lang="scss">
-
 .viewed-property-wrapper {
     width: 100%;
     height: 100%;
     overflow: auto;
     scrollbar-width: none;
 }
-
 </style>

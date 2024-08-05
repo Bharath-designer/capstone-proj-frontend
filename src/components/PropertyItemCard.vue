@@ -2,9 +2,14 @@
     <div v-if="isAdmin" class="special-row">
         <el-switch v-model="property.isApproved" :before-change="getConfirmation" />
     </div>
-    <div v-if="isMyListings && property.isApproved === false" class="special-row">
+    <div v-else-if="isMyListings && property.isApproved === false" class="special-row">
         <el-tag size="large" class="property-approval-warning" type="danger">
             Property is will be published once Admin approves.
+        </el-tag>
+    </div>
+    <div v-else-if="property.isApproved === false" class="special-row">
+        <el-tag size="large" class="property-approval-warning" type="danger">
+            Property is disapproved by the Admin.
         </el-tag>
     </div>
     <div class="property-item-card-wrapper" @click="redirectFunction">
