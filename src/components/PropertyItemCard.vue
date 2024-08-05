@@ -168,7 +168,6 @@ export default {
         img,
         video {
             width: 17em;
-            height: 100%;
             object-fit: cover;
             border-radius: .25em;
         }

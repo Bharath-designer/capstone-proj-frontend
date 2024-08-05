@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(config => config, (error) => {
   // console.log("[INTERCEPTOR]", error);
   if ([401, 403].includes(error.response?.status)) {
-    // localStorage.clear()
+    localStorage.clear()
     location.replace("/")
   }
   return Promise.reject(error)

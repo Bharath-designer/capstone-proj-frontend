@@ -7,8 +7,8 @@
                     placeholder="Select State" size="large">
                     <el-option v-for="item in states" :key="item" :label="item" :value="item" />
                 </el-select>
-                <el-select clearable ref="tagref" class="tag select-element" v-model="selectedTags" multiple filterable remote
-                    reserve-keyword collapse-tags collapse-tags-tooltip :max-collapse-tags="2"
+                <el-select clearable ref="tagref" class="tag select-element" v-model="selectedTags" multiple filterable
+                    remote reserve-keyword collapse-tags collapse-tags-tooltip :max-collapse-tags="2"
                     placeholder="Search for tags" :remote-method="getTags" :loading="tagsLoading" size="large">
                     <el-option v-for="item in tags" :key="item" :label="item" :value="item" />
                 </el-select>
@@ -19,10 +19,42 @@
                 </button>
             </div>
         </div>
+        <div class="why-choosing-us">
+            <div class="section-title">
+                Why choosing us
+            </div>
+            <div class="section-card-container">
+                <div class="section-card">
+                    <div class="card-title">
+                        Verified Properties
+                    </div>
+                    <div class="card-desc">
+                        Each property is verified before publishing to public
+                    </div>
+                </div>
+                <div class="section-card">
+                    <div class="card-title">
+                        No Broker
+                    </div>
+                    <div class="card-desc">
+                        No middleman between the buyer and the seller
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <div class="card-title">
+                        Free Trial
+                    </div>
+                    <div class="card-desc">
+                        Every user will have 1 free limit for posting and viewing property
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <el-tour size="small" v-model="tourOpen" :mask="true">
         <el-tour-step size="small" :target="$refs?.stateref?.$el" description="Select State (Optional)" />
-        <el-tour-step size="small" :target="$refs?.tagref?.$el" description="Select Tags (Optional)"  />
+        <el-tour-step size="small" :target="$refs?.tagref?.$el" description="Select Tags (Optional)" />
         <el-tour-step size="small" target="#search-btn" description="Explore Properties" />
     </el-tour>
     <div v-if="tourConsent" class="take-tour-consent">
@@ -49,7 +81,7 @@ export default {
             selectedTags: [],
             tagsLoading: true,
             tourOpen: false,
-            tourConsent:false
+            tourConsent: false
         }
     },
     computed: {
@@ -92,7 +124,7 @@ export default {
         },
         consentNoHandler() {
             this.tourConsent = false
-            localStorage.setItem("tour","done")
+            localStorage.setItem("tour", "done")
         }
     },
     mounted() {
@@ -104,7 +136,7 @@ export default {
         if (consent !== "done") {
             setTimeout(() => {
                 this.tourConsent = true
-            }, 2000);
+            }, 0);
         }
     }
 }
@@ -218,19 +250,65 @@ export default {
 
 }
 
+.why-choosing-us {
+    width: min(50em, 90%);
+    margin-top: 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    .section-title {
+        text-align: center;
+        font-weight: 500;
+        color: #323232;
+        font-size: 1.1em;
+    }
+
+    .section-card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .8em;
+        justify-content: center;
+
+        .section-card {
+            padding: .5em;
+            background: white;
+            max-width: 15em;
+            border-radius: .25em;
+            display: flex;
+            flex-direction: column;
+
+            .card-title {
+                text-align: center;
+                color: var(--primary-color);
+                font-weight: 500;
+                padding: .4em;
+            }
+
+            .card-desc {
+                font-size: .9em;
+                padding: .5em;
+                text-align: center;
+            }
+        }
+    }
+}
+
 .take-tour-consent {
     position: absolute;
     bottom: 0;
     left: 0;
     font-size: .9em;
-    padding: .8em;
+    padding: 1em 2em;
     background: white;
     border-radius: .25em;
-    transform: translate(20px,-20px);
+    transform: translate(20px, -20px);
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: .5em;
+    z-index: 2;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.673);
 
     span {
         font-size: .9em;
@@ -240,5 +318,4 @@ export default {
         display: flex;
     }
 }
-
 </style>
