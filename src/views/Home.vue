@@ -286,9 +286,10 @@ export default {
             }
 
             .card-desc {
-                font-size: .9em;
+                font-size: .85em;
                 padding: .5em;
                 text-align: center;
+                color: rgb(81, 81, 81);
             }
         }
     }

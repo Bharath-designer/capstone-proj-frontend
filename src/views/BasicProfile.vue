@@ -325,7 +325,6 @@ export default {
             })
         }
 
-        console.log(this.$route.query);
         this.$router.replace({ query: {} })
 
     }
